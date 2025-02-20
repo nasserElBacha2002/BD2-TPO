@@ -2,9 +2,12 @@ import sys
 from mongo import connect_mongodb
 from redis_db import connect_redis
 from users import create_user, get_user_by_id, create_producto, get_producto_by_id, update_producto, delete_producto, create_categoria, update_categoria_automatica, login, logout, get_session
-from cart import add_to_cart, get_cart, clear_cart
-from catalogo import create_product, update_price, get_product_price
+from cart import add_to_cart, get_cart, clear_cart, convertir_carrito,ver_pedidos
+from catalogo import update_price, get_product_price
 from cassandra_db import connect_cassandra
+from facturas import confirmar_pedido, obtener_pedidos, obtener_ultimo_pedido, obtener_facturas
+
+
 
 def main():
     # Conexión a MongoDB y Redis (una sola vez)
@@ -41,9 +44,14 @@ def main():
         print("12. Iniciar sesión")
         print("13. Cerrar sesión")
         print("14. Ver sesión activa")
-        print("15. Crear producto")
-        print("16. Actualizar precio de producto")
-        print("17. Obtener precio de producto")
+        print("15. Actualizar precio de producto")
+        print("16. Obtener precio de producto")
+        print("17. Convertir carrito a pedido")
+        print("18 . Ver pedidos")
+        print ("19. Confirmar pedido")
+        print ("20. Obtener pedidos")
+        print ("21. Obtener último pedido")
+        print ("22. Obtener facturas")
         print("0. Salir")
         
         try:
@@ -73,8 +81,10 @@ def main():
             print("Producto creado exitosamente.")
         
         elif opcion == 4:
+            user_id = input("ID del usuario; ")
             producto_id = input("ID del producto: ")
-            producto = get_producto_by_id(producto_id)
+            
+            producto = get_producto_by_id(user_id,producto_id)
             print("Producto encontrado:", producto)
         
         elif opcion == 5:
@@ -118,9 +128,9 @@ def main():
             print("Categoría actualizada según compras.")
 
         elif opcion == 12:
-            user_id = input("ID del usuario: ")
+            email = input("email: ")
             password = input("Contraseña: ")
-            login(user_id, password)
+            login(email, password)
             print("Sesión iniciada.")
         
         elif opcion == 13:
@@ -132,26 +142,51 @@ def main():
             user_id = input("ID del usuario: ")
             session = get_session(user_id)
             print("Sesión activa:", session)
+      
         
         elif opcion == 15:
-            nombre = input("Nombre del producto: ")
-            descripcion = input("Descripción: ")
-            producto_id = input("ID del producto: ")
-            create_product(nombre, descripcion, producto_id)
-            print("Producto creado exitosamente.")
-        
-        elif opcion == 16:
             producto_id = input("ID del producto: ")
             precio = float(input("Nuevo precio: "))
             update_price(producto_id, precio)
             print("Precio actualizado.")
         
-        elif opcion == 17:
+        elif opcion == 16:
             producto_id = input("ID del producto: ")
             user_id = input("ID del usuario: ")
             precio = get_product_price(user_id,producto_id)
-            print("Precio del producto:", precio)
-    
+
+        elif opcion == 17:
+            
+            user_id = input("ID del usuario: ")
+            forma_pago =input("forma de pago: ")
+            convertir_carrito(user_id,forma_pago)
+
+        elif opcion ==18:
+            user_id = input("ID del usuario: ")
+            ver_pedidos(user_id)
+
+        elif opcion == 19:
+            user_id = input("ID del usuario: ")
+            pedido_id = input("ID del pedido: ")
+            monto_final = float(input("Monto final: "))
+            forma_pago = input("Forma de pago: ")
+            confirmar_pedido(user_id, pedido_id, monto_final, forma_pago)
+        
+        elif opcion == 20:
+            user_id = input("ID del usuario: ")
+            pedidos = obtener_pedidos(user_id)
+            print("Pedidos:", pedidos)
+        
+        elif opcion == 21:
+            user_id = input("ID del usuario: ")
+            ultimo_pedido = obtener_ultimo_pedido(user_id)
+            print("Último pedido:", ultimo_pedido)
+
+        elif opcion == 22:
+            user_id = input("ID del usuario: ")
+            facturas = obtener_facturas(user_id)
+            print("Facturas:", facturas)
+                
         elif opcion == 0:
             print("Saliendo del sistema...")
             print("Cerrando conexiones...")

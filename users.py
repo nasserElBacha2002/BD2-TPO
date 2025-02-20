@@ -58,10 +58,8 @@ def update_categoria_automatica(user_id):
         create_categoria(user_id, categoria)
 
 # --- Funciones de Productos ---
-def create_producto(nombre, descripcion, producto_id, user_id):
-    if not get_session(user_id):
-        print("El usuario no tiene una sesión activa.")
-        return
+def create_producto(nombre, descripcion, producto_id):
+    
     productos = db["productos"]
     
     if productos.find_one({"id": producto_id}):
@@ -71,14 +69,16 @@ def create_producto(nombre, descripcion, producto_id, user_id):
     result = productos.insert_one({"id": producto_id, "nombre": nombre, "descripcion": descripcion})
     print(f"Producto creado con ID: {result.inserted_id}")
 
-def get_producto_by_id(producto_id):
-    productos = db["productos"]
-    return productos.find_one({"id": producto_id})
-
-def update_producto(producto_id, nombre=None, descripcion=None, user_id=None):
+def get_producto_by_id(user_id,producto_id):
     if user_id and not get_session(user_id):
         print("El usuario no tiene una sesión activa.")
         return
+    productos = db["productos"]
+    
+    return productos.find_one({"id": producto_id})   
+
+def update_producto(producto_id, nombre=None, descripcion=None, user_id=None):
+    
     productos = db["productos"]
     
     update_data = {}
@@ -97,10 +97,8 @@ def update_producto(producto_id, nombre=None, descripcion=None, user_id=None):
     else:
         print(f"No se realizaron cambios en el producto con ID {producto_id}")
 
-def delete_producto(producto_id, user_id):
-    if not get_session(user_id):
-        print("El usuario no tiene una sesión activa.")
-        return
+def delete_producto(producto_id):
+    
     productos = db["productos"]
     
     if not productos.find_one({"id": producto_id}):

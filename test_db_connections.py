@@ -5,8 +5,8 @@ from cassandra.cluster import Cluster
 def test_mongo():
     try:
         client = MongoClient("mongodb://localhost:27017/")
-        db = client.admin  
-        db.command("ping") 
+        db = client.admin  # Intentamos acceder a la base de administración
+        db.command("ping")  # Comando para verificar conexión
         print("✅ Conexión a MongoDB exitosa")
     except Exception as e:
         print(f"❌ Error en MongoDB: {e}")
@@ -14,17 +14,18 @@ def test_mongo():
 def test_redis():
     try:
         r = redis.Redis(host='localhost', port=6379, decode_responses=True)
-        r.ping() 
+        r.ping()  # Verifica conexión enviando un "ping"
         print("✅ Conexión a Redis exitosa")
     except Exception as e:
         print(f"❌ Error en Redis: {e}")
 
 def test_cassandra():
     try:
+        # Usar la forma correcta para pasar las IPs
         cluster = Cluster(["127.0.0.1"], port=9042)  
-        session = cluster.connect() 
+        session = cluster.connect()  # Crear una sesión
         print("✅ Conexión a Cassandra exitosa")
-        cluster.shutdown() 
+        cluster.shutdown()  # Cerrar la conexión
     except Exception as e:
         print(f"❌ Error en Cassandra: {e}")
 

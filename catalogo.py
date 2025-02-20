@@ -5,28 +5,17 @@ from users import get_session
 # Conexión a Redis
 client = connect_redis()
 
-
-def create_product(product_id, name, description, price):
-    product_key = f"product:{product_id}"
-    client.hset(product_key, mapping={
-        'name': name,
-        'description': description,
-        'price': price
-    })
-    print(f"Producto con ID {product_id} creado.")
-
-
-
 def update_price(product_id, price):
     product_key = f"product:{product_id}"
     if client.exists(product_key):
         client.hset(product_key, mapping={
-            
             'price': price
         })
         print(f"Producto con ID {product_id} actualizado.")
     else:
-        print(f"Producto con ID {product_id} no existe.")
+       client.hset(product_key, mapping={
+        'price': price
+    })
 
 def get_product_price(user_id,product_id):
     if not get_session(user_id):
