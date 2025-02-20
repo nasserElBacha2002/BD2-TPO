@@ -3,6 +3,8 @@ from mongo import connect_mongodb
 from redis_db import connect_redis
 from users import create_user, get_user_by_id, create_producto, get_producto_by_id, update_producto, delete_producto, create_categoria, update_categoria_automatica, login, logout, get_session
 from cart import add_to_cart, get_cart, clear_cart
+from catalogo import create_product, update_price, get_product_price
+from cassandra_db import connect_cassandra
 
 def main():
     # Conexión a MongoDB y Redis (una sola vez)
@@ -16,6 +18,12 @@ def main():
     except Exception as e:
         print(f"Error conectando a Redis: {e}")
         sys.exit(1)
+    try:
+        cassandra_client = connect_cassandra()
+    except Exception as e:
+        print(f"Error conectando a Cassandra: {e}")
+        sys.exit(1)
+    
     
     while True:
         print("\n===== MENÚ PRINCIPAL =====")
@@ -33,6 +41,9 @@ def main():
         print("12. Iniciar sesión")
         print("13. Cerrar sesión")
         print("14. Ver sesión activa")
+        print("15. Crear producto")
+        print("16. Actualizar precio de producto")
+        print("17. Obtener precio de producto")
         print("0. Salir")
         
         try:
@@ -121,6 +132,25 @@ def main():
             user_id = input("ID del usuario: ")
             session = get_session(user_id)
             print("Sesión activa:", session)
+        
+        elif opcion == 15:
+            nombre = input("Nombre del producto: ")
+            descripcion = input("Descripción: ")
+            producto_id = input("ID del producto: ")
+            create_product(nombre, descripcion, producto_id)
+            print("Producto creado exitosamente.")
+        
+        elif opcion == 16:
+            producto_id = input("ID del producto: ")
+            precio = float(input("Nuevo precio: "))
+            update_price(producto_id, precio)
+            print("Precio actualizado.")
+        
+        elif opcion == 17:
+            producto_id = input("ID del producto: ")
+            user_id = input("ID del usuario: ")
+            precio = get_product_price(user_id,producto_id)
+            print("Precio del producto:", precio)
     
         elif opcion == 0:
             print("Saliendo del sistema...")
