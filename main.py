@@ -1,7 +1,7 @@
 import sys
 from mongo import connect_mongodb
 from redis_db import connect_redis
-from users import create_user, get_user_by_id, create_producto, get_producto_by_id, update_producto, delete_producto, create_categoria, update_categoria_automatica
+from users import create_user, get_user_by_id, create_producto, get_producto_by_id, update_producto, delete_producto, create_categoria, update_categoria_automatica, login, logout, get_session
 from cart import add_to_cart, get_cart, clear_cart
 
 def main():
@@ -30,6 +30,9 @@ def main():
         print("9. Vaciar carrito")
         print("10. Asignar categoría de usuario")
         print("11. Actualizar categoría automáticamente")
+        print("12. Iniciar sesión")
+        print("13. Cerrar sesión")
+        print("14. Ver sesión activa")
         print("0. Salir")
         
         try:
@@ -102,7 +105,23 @@ def main():
             user_id = input("ID del usuario: ")
             update_categoria_automatica(user_id)
             print("Categoría actualizada según compras.")
+
+        elif opcion == 12:
+            user_id = input("ID del usuario: ")
+            password = input("Contraseña: ")
+            login(user_id, password)
+            print("Sesión iniciada.")
         
+        elif opcion == 13:
+            user_id = input("ID del usuario: ")
+            logout(user_id)
+            print("Sesión cerrada.")
+        
+        elif opcion == 14:
+            user_id = input("ID del usuario: ")
+            session = get_session(user_id)
+            print("Sesión activa:", session)
+    
         elif opcion == 0:
             print("Saliendo del sistema...")
             print("Cerrando conexiones...")
