@@ -104,7 +104,7 @@ def main():
             product_id = input("ID del producto: ")
             quantity = int(input("Cantidad: "))
             add_to_cart(user_id, product_id, quantity)
-            print("Producto agregado al carrito.")
+            #print("Producto agregado al carrito.")
         
         elif opcion == 8:
             user_id = input("ID del usuario: ")
@@ -174,7 +174,7 @@ def main():
         
         elif opcion == 20:
             user_id = input("ID del usuario: ")
-            pedidos = obtener_pedidos(user_id)
+            pedidos = obtener_pedidos()
             print("Pedidos:", pedidos)
         
         elif opcion == 21:
@@ -183,8 +183,8 @@ def main():
             print("Último pedido:", ultimo_pedido)
 
         elif opcion == 22:
-            user_id = input("ID del usuario: ")
-            facturas = obtener_facturas(user_id)
+            
+            facturas = obtener_facturas()
             print("Facturas:", facturas)
                 
         elif opcion == 0:

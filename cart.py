@@ -85,7 +85,7 @@ def convertir_carrito(user_id, forma_pago):
     order_id = uuid.uuid4()
 
     # Convertir las claves a str y los valores a int
-    #cart = {str(k): int(v) for k, v in cart.items()}
+    cart = {str(k): int(v) for k, v in cart.items()}
 
     # Calcular el total, descuentos e impuestos
     total = 0
@@ -159,6 +159,7 @@ def ver_pedidos(user_id):
     """Ver los pedidos de un usuario específico."""
     # Conectar a Cassandra
     session = connect_cassandra()
+    print(f"session existe? {session}")
 
     # Asegurarse de usar el keyspace adecuado
     session.execute("USE tu_keyspace")
@@ -232,3 +233,31 @@ def convertir_carrito(user_id):
     clear_cart(user_id)
 
 '''
+
+
+#----cassandra------
+
+
+#   Guardar, recuperar y volver a estados anteriores en las acciones realizadas sobre un carrito de compras activo. #sacamos los pedidos de facturas 
+
+
+
+#Facturar el pedido y registrar el pago indicando la forma de pago
+#funcion CONVERTIR_PEDIDO --> Convertir el contenido del carrito de compras en un pedido con detalles del cliente, 
+#importes, descuentos (segun categoria )e impuestos(iva 21%).
+
+
+
+
+
+#historial de operaciones --> Llevar el control de operaciones de facturación y pagos realizados por los usuarios.
+
+#facturas 
+#id, monto(final) ,pedido,fecha
+
+
+#se actualiza tabla historial  cassandra
+#funcion historial de cambios --> Llevar un registro de todas las actividades realizadas sobre el catálogo de productos.
+# id producto , comentario(sobre cambio de precio, nombre,etc)  
+
+

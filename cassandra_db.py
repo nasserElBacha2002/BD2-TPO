@@ -3,17 +3,12 @@ from cassandra.auth import PlainTextAuthProvider
 from cassandra import DriverException
 
 def connect_cassandra():
+    
     try:
-        # Configuración del clúster (agrega autenticación si es necesario)
-        cluster = Cluster(['127.0.0.1'])  # IP del nodo Cassandra
-        session = cluster.connect()
-        session.set_keyspace('tu_keyspace')
-        print("Conexión a Cassandra exitosa.")
-
+        cluster = Cluster(['127.0.0.1'])
+        session = cluster.connect('tu_keyspace')  # Conectar directamente al keyspace
+        #print("✅ Conexión a Cassandra establecida con el keyspace 'tu_keyspace'.")
         return session
-    except DriverException as e:
-        print(f"Error al conectar con Cassandra: {e}")
-        return None
     except Exception as e:
-        print(f"Error inesperado: {e}")
+        print(f"❌ Error al conectar a Cassandra: {e}")
         return None
